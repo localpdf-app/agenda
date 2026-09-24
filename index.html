@@ -151,7 +151,8 @@ button { cursor: pointer; border: none; background: none; }
   background: repeating-linear-gradient(-45deg, var(--red) 0 10px, #ffffff 10px 20px, var(--blue) 20px 30px, #ffffff 30px 40px);
 }
 
-main { padding: 16px 0 280px; }
+/* Espaçamento ampliado para não cortar horários finais no mobile */
+main { padding: 16px 0 calc(220px + env(safe-area-inset-bottom, 0px)); }
 
 /* Data e Controles */
 .datebar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -694,10 +695,10 @@ function setupPWA(){
   }
 }
 
-/* --- Estado Inicial --- */
+/* --- Estado Inicial (Abertura padrão alterada para 08:00) --- */
 function defaultConfig(){
   const h = {};
-  for(let i=0;i<7;i++) h[i] = {open: i!==0, start:'09:00', end:'19:00'};
+  for(let i=0;i<7;i++) h[i] = {open: i!==0, start:'08:00', end:'19:00'};
   return {
     shop:'Minha Barbearia', step:30, logo:null, theme:'dark',
     barbers:[{id:'b1', name:'Barbeiro'}],
@@ -787,7 +788,7 @@ function loadLogoFile(file){
 
 /* --- Regras de Negócio --- */
 const dayList = date => S.days[date] || [];
-const hoursFor = date => S.cfg.hours[pdate(date).getDay()] || {open:false,start:'09:00',end:'19:00'};
+const hoursFor = date => S.cfg.hours[pdate(date).getDay()] || {open:false,start:'08:00',end:'19:00'};
 const barberName = id => (S.cfg.barbers.find(b => b.id === id) || {name:'—'}).name;
 function ensureBarber(){
   if(!S.cfg.barbers.find(b => b.id === S.barber)) S.barber = S.cfg.barbers[0].id;
@@ -920,7 +921,7 @@ function timelineHtml(){
   const list = dayList(date).filter(a => a.barberId === bid);
   const act = list.filter(active).sort((a,b) => tmin(a.time)-tmin(b.time) || a.dur-b.dur);
   const off = list.filter(a => !active(a)).sort((a,b) => tmin(a.time)-tmin(b.time));
-  const o = h.open ? tmin(h.start) : (act[0] ? tmin(act[0].time) : 540);
+  const o = h.open ? tmin(h.start) : (act[0] ? tmin(act[0].time) : 480);
   const c = h.open ? tmin(h.end) : o;
   const nowM = date === today() ? nowMin() : null;
   const rows = []; let nowPlaced = false, cur = o, k = 0;
@@ -1000,7 +1001,7 @@ function defaultTime(date, barberId){
   const svc = S.cfg.services[0];
   const f = freeStarts(date, barberId, svc ? svc.min : 30);
   if(f.length) return mtime(f[0]);
-  const h = hoursFor(date); return h.open ? h.start : '09:00';
+  const h = hoursFor(date); return h.open ? h.start : '08:00';
 }
 
 function openForm(o){
@@ -1350,7 +1351,7 @@ function cfgChange(t){
   else if(k === 'smin') c.services[i].min = Math.max(5, parseInt(t.value,10) || 30);
   else if(k === 'sprice') c.services[i].price = Math.max(0, parseFloat(t.value) || 0);
   else if(k === 'hopen'){ c.hours[d].open = t.checked; persistConfig(); renderView(); return; }
-  else if(k === 'hstart') c.hours[d].start = t.value || '09:00';
+  else if(k === 'hstart') c.hours[d].start = t.value || '08:00';
   else if(k === 'hend') c.hours[d].end = t.value || '19:00';
   persistConfig(); $('#shop').textContent = c.shop; toast('Ajuste salvo');
 }

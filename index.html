@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F172A">
+<title>Agenda da Barbearia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface2: #E2E8F0;
+  --surface-subtle: #F1F5F9;
+  --border: #CBD5E1;
+  --text: #0F172A;
+  --muted: #334155;
+  --accent: #B8860B;
+  --accent-hover: #996515;
+  --accent-soft: rgba(184, 134, 11, 0.15);
+  
+  --red: #DC2626;
+  --red-bg: #FEE2E2;
+  --blue: #1D4ED8;
+  --blue-bg: #DBEAFE;
+  --green: #047857;
+  --green-bg: #D1FAE5;
+  --amber: #B45309;
+  --amber-bg: #FEF3C7;
+  
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.2);
+  --radius: 12px;
+  
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+:root[data-theme="dark"] {
+  --bg: #0F172A;
+  --surface: #1E293B;
+  --surface2: #334155;
+  --surface-subtle: #0F172A;
+  --border: #475569;
+  --text: #FFFFFF;
+  --muted: #CBD5E1;
+  --accent: #F1C40F;
+  --accent-hover: #F39C12;
+  --accent-soft: rgba(241, 196, 15, 0.2);
+  
+  --red: #EF4444;
+  --red-bg: rgba(239, 68, 68, 0.25);
+  --blue: #3B82F6;
+  --blue-bg: rgba(59, 130, 246, 0.25);
+  --green: #10B981;
+  --green-bg: rgba(16, 185, 129, 0.25);
+  --amber: #F59E0B;
+  --amber-bg: rgba(245, 158, 11, 0.25);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.6);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-main);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.lock { overflow: hidden; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: none; background: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+
+/* Topo */
+.top {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+}
+.top .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  padding-bottom: 12px;
+}
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+#brandimg {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+.top h1 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.theme-btn {
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sync {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.sync i { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.sync.ok i { background: var(--green); }
+
+.pole {
+  height: 4px;
+  background: repeating-linear-gradient(-45deg, var(--red) 0 10px, #ffffff 10px 20px, var(--blue) 20px 30px, #ffffff 30px 40px);
+}
+
+main { padding: 16px 0 280px; }
+
+/* Data e Controles */
+.datebar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.dtitle { flex: 1; text-align: center; }
+.dtitle h2 { margin: 0; font-size: 1.4rem; font-weight: 800; text-transform: capitalize; color: var(--text); }
+.dtitle p { margin: 2px 0 0; color: var(--muted); font-size: 13px; font-weight: 600; }
+
+.arrow {
+  width: 42px; height: 42px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s;
+}
+.arrow:hover { background: var(--surface2); }
+
+.dtools { display: flex; gap: 8px; justify-content: center; margin: 14px 0 8px; flex-wrap: wrap; align-items: center; }
+.pill {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.pill:hover { background: var(--surface2); }
+.pill.on { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 800; }
+
+.jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.jump input[type="date"] {
+  border: 0;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  width: 130px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 14px 0; }
+.wd {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 8px 0;
+  text-align: center;
+  transition: all 0.2s;
+}
+.wd small { display: block; color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; }
+.wd b { display: block; font-size: 16px; font-weight: 800; margin: 2px 0; color: var(--text); }
+.wd em { display: block; font-style: normal; font-size: 10px; color: var(--muted); font-weight: 700; min-height: 12px; }
+.wd.sel { background: var(--accent); border-color: var(--accent); color: #000; }
+.wd.sel small, .wd.sel b, .wd.sel em { color: #000; opacity: 1; }
+.wd.closed { opacity: 0.5; }
+.wd.today b { color: var(--accent); }
+.wd.sel.today b { color: #000; }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 14px; }
+
+/* Resumo em Cards */
+.stats {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 12px 0;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.stats div { flex: 1; padding: 12px; border-right: 1px solid var(--border); }
+.stats div:last-child { border-right: none; }
+.stats b { display: block; font-size: 18px; font-weight: 800; color: var(--accent); }
+.stats span { font-size: 12px; color: var(--muted); font-weight: 700; }
+
+.next {
+  margin: 10px 0 16px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--blue-bg);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  border-left: 4px solid var(--blue);
+}
+
+/* Timeline */
+.tl { display: flex; flex-direction: column; gap: 10px; }
+.free {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 12px;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  text-align: left;
+}
+.free .t { padding-top: 10px; font-weight: 800; color: var(--muted); }
+.free .slot {
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+.free:hover .slot { border-color: var(--accent); background: var(--surface2); color: var(--text); }
+.free .slot b { color: var(--accent); font-weight: 800; }
+.free.past { opacity: 0.6; }
+
+.card {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--amber);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  align-items: start;
+}
+.card.st-confirmado { border-left-color: var(--blue); }
+.card.st-concluido { border-left-color: var(--green); }
+.card.live { box-shadow: 0 0 0 2px var(--red); }
+.card.block {
+  border-left-color: var(--muted);
+  background: repeating-linear-gradient(135deg, var(--surface-subtle) 0 10px, var(--surface) 10px 20px);
+}
+.card .t b { display: block; font-size: 15px; font-weight: 800; color: var(--text); }
+.card .t span { color: var(--muted); font-size: 12px; font-weight: 700; }
+.nm { font-weight: 800; font-size: 16px; color: var(--text); }
+.sb { color: var(--muted); font-size: 13px; font-weight: 600; margin-top: 2px; }
+.nt { font-size: 13px; margin-top: 6px; color: var(--text); font-weight: 600; background: var(--bg); padding: 4px 8px; border-radius: 6px; }
+
+.meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+.tag { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 999px; background: var(--amber-bg); color: var(--amber); }
+.tag.confirmado { background: var(--blue-bg); color: var(--blue); }
+.tag.concluido { background: var(--green-bg); color: var(--green); }
+.tag.cancelado, .tag.faltou { background: var(--red-bg); color: var(--red); }
+.tag.live { background: var(--red); color: #fff; }
+
+.quick { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+
+.btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.btn:hover { background: var(--surface2); }
+.btn.pri { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 800; }
+.btn.pri:hover { background: var(--accent-hover); }
+.btn.sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); }
+
+.wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--green);
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+}
+.wa svg { width: 15px; height: 15px; }
+
+.nowline { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; }
+.nowline span { font-size: 11px; font-weight: 800; color: var(--red); text-align: right; }
+.nowline i { display: block; height: 2px; background: var(--red); border-radius: 2px; }
+
+.closed-box, .empty {
+  padding: 24px 16px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.closed-box b, .empty b { display: block; color: var(--text); font-size: 16px; margin-bottom: 4px; font-weight: 800; }
+.sec { margin: 24px 0 12px; font-size: 1.1rem; font-weight: 800; color: var(--text); }
+.dim .card { opacity: 0.7; }
+.dim .nm { text-decoration: line-through; }
+
+/* Módulos e Painéis */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.panel h3 { margin: 0 0 12px; font-size: 1.1rem; font-weight: 800; color: var(--text); }
+.lead { color: var(--muted); font-size: 13px; font-weight: 600; margin: -4px 0 14px; }
+
+input[type=text], input[type=search], input[type=tel], input[type=number], input[type=date], input[type=time], select, textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  transition: border-color 0.2s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); outline: none; }
+textarea { resize: vertical; min-height: 80px; }
+label.f { display: block; font-size: 12px; font-weight: 800; color: var(--muted); margin: 0 0 6px; text-transform: uppercase; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.fld { margin-bottom: 14px; position: relative; }
+
+/* Custom Auto-complete sugestões */
+.suggest-box {
+  position: absolute;
+  top: 100%;
+  left: 0; right: 0;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: var(--shadow-lg);
+  margin-top: 4px;
+}
+.suggest-item {
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text);
+}
+.suggest-item:last-child { border-bottom: none; }
+.suggest-item:hover { background: var(--surface2); color: var(--accent); }
+.suggest-item small { color: var(--muted); font-size: 12px; font-weight: 600; }
+
+.client { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.client:last-child { border-bottom: 0; }
+.client .act { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+.bar { height: 6px; border-radius: 3px; background: var(--bg); overflow: hidden; margin-top: 6px; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+
+.brk { padding: 10px 0; border-top: 1px solid var(--border); }
+.brk:first-of-type { border-top: 0; }
+.brk div { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; }
+
+.big { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.big div { padding: 14px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); }
+.big b { display: block; font-size: 20px; font-weight: 800; color: var(--accent); }
+.big span { font-size: 12px; color: var(--muted); font-weight: 700; }
+
+.srow { display: grid; grid-template-columns: 1fr 84px 104px 38px; gap: 8px; align-items: center; margin-bottom: 8px; }
+.hrow { display: grid; grid-template-columns: 110px 1fr 1fr; gap: 8px; align-items: center; margin-bottom: 12px; }
+.hrow label.chk { display: flex; gap: 8px; align-items: center; font-weight: 700; font-size: 14px; cursor: pointer; color: var(--text); }
+.brow { display: grid; grid-template-columns: 1fr 38px; gap: 8px; margin-bottom: 8px; }
+.x { border: 1px solid var(--border); background: var(--bg); border-radius: 8px; height: 42px; color: var(--red); font-size: 18px; font-weight: 800; }
+.hd { display: grid; grid-template-columns: 1fr 84px 104px 38px; gap: 8px; font-size: 12px; color: var(--muted); font-weight: 800; margin-bottom: 4px; }
+
+/* FABs e Navegação Inferior */
+.fabwrap {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: calc(65px + env(safe-area-inset-bottom, 0px));
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  pointer-events: none;
+  z-index: 15;
+}
+.fab {
+  pointer-events: auto;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #000;
+  font-weight: 800;
+  padding: 14px 22px;
+  box-shadow: var(--shadow-lg);
+  font-size: 15px;
+}
+.fab.alt { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+
+nav.tabs {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 20;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+nav.tabs div { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+nav.tabs button {
+  border: 0; background: none;
+  padding: 10px 0 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+nav.tabs svg { width: 20px; height: 20px; }
+nav.tabs button[aria-current=page] { color: var(--accent); font-weight: 800; }
+
+/* Modal Bottom-Sheet */
+#modal {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.sheet {
+  background: var(--surface);
+  width: 100%;
+  max-width: 580px;
+  border-radius: 20px 20px 0 0;
+  padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  max-height: 92vh;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+}
+@media (min-width: 640px) {
+  #modal { align-items: center; }
+  .sheet { border-radius: 16px; }
+}
+.sheet h2 { margin: 0 0 14px; font-size: 1.25rem; font-weight: 800; color: var(--text); }
+
+.seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.seg button {
+  flex: 1;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.seg button.on { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 800; }
+
+.hint { padding: 10px 12px; border-radius: 8px; font-size: 13px; margin-bottom: 12px; background: var(--green-bg); color: var(--green); font-weight: 700; }
+.hint.warn { background: var(--amber-bg); color: var(--amber); }
+.hint.bad { background: var(--red-bg); color: var(--red); }
+
+.times { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; max-height: 140px; overflow-y: auto; }
+.times button {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.times button.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+.mact { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.mact .grow { flex: 1; }
+.err { color: var(--red); font-weight: 700; font-size: 13px; margin: 0 0 8px; }
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  background: var(--text);
+  color: var(--bg);
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  z-index: 60;
+  box-shadow: var(--shadow-lg);
+}
+.loading { padding: 60px 0; text-align: center; color: var(--muted); font-weight: 700; }
+
+.history-item {
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent);
+  background: var(--bg);
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 8px;
+}
+.history-item .h-date { font-weight: 800; font-size: 13px; color: var(--text); }
+.history-item .h-detail { font-size: 13px; color: var(--muted); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <img id="brandimg" alt="" hidden>
+      <h1 id="shop">Barbearia</h1>
+    </div>
+    <div class="top-actions">
+      <button class="theme-btn" data-a="toggleTheme" type="button" aria-label="Alternar Tema">
+        <span id="theme-icon">☀️</span> <span id="theme-label">Claro</span>
+      </button>
+      <div class="sync" id="sync"><i></i><span>Conectando...</span></div>
+    </div>
+  </div>
+  <div class="pole" aria-hidden="true"></div>
+</header>
+
+<main class="wrap" id="view">
+  <div class="loading">Abrindo a agenda...</div>
+</main>
+
+<div class="fabwrap" id="fabs" hidden>
+  <button class="fab alt" data-a="block" type="button">Bloquear horário</button>
+  <button class="fab" data-a="new" type="button">+ Novo agendamento</button>
+</div>
+
+<nav class="tabs" aria-label="Navegação Principal">
+  <div>
+    <button data-a="tab" data-tab="agenda" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+      Agenda
+    </button>
+    <button data-a="tab" data-tab="clientes" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.5 3-5.5 6.5-5.5s6 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .6 3.3 2.4 3.6 5.2"/></svg>
+      Clientes
+    </button>
+    <button data-a="tab" data-tab="resumo" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+      Resumo
+    </button>
+    <button data-a="tab" data-tab="ajustes" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      Ajustes
+    </button>
+  </div>
+</nav>
+
+<div id="modal" hidden></div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+'use strict';
+
+/* --- Utilidades --- */
+const $ = (s, el=document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const dstr = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const pdate = s => { const p = s.split('-').map(Number); return new Date(p[0], p[1]-1, p[2]); };
+const addDays = (s,n) => { const d = pdate(s); d.setDate(d.getDate()+n); return dstr(d); };
+const today = () => dstr(new Date());
+const nowMin = () => { const n = new Date(); return n.getHours()*60+n.getMinutes(); };
+const tmin = t => { const p = String(t||'0:0').split(':').map(Number); return (p[0]||0)*60+(p[1]||0); };
+const mtime = m => pad(Math.floor(m/60))+':'+pad(m%60);
+const money = v => (Number(v)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const digits = s => String(s||'').replace(/\D/g,'');
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+const fmtShort = s => pdate(s).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+const fmtLong = s => pdate(s).toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+const WD = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+const WDS = ['dom','seg','ter','qua','qui','sex','sáb'];
+const STATUS = {agendado:'Agendado',confirmado:'Confirmado',concluido:'Concluído',cancelado:'Cancelado',faltou:'Faltou'};
+const active = a => a.status !== 'cancelado' && a.status !== 'faltou';
+
+/* --- Configuração PWA Dinâmica --- */
+function setupPWA(){
+  const manifest = {
+    name: "BarberControl Agenda",
+    short_name: "BarberControl",
+    start_url: "./",
+    display: "standalone",
+    background_color: "#0F172A",
+    theme_color: "#0F172A",
+    icons: [{ src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23D4AF37'/><text y='.9em' font-size='90'>✂️</text></svg>", sizes: "192x192 512x512", type: "image/svg+xml" }]
+  };
+  const stringManifest = JSON.stringify(manifest);
+  const blob = new Blob([stringManifest], {type: 'application/json'});
+  const manifestURL = URL.createObjectURL(blob);
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = manifestURL;
+  document.head.appendChild(link);
+
+  if ('serviceWorker' in navigator) {
+    const swCode = `
+      self.addEventListener('install', e => self.skipWaiting());
+      self.addEventListener('activate', e => self.clients.claim());
+      self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+    `;
+    const swBlob = new Blob([swCode], {type: 'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
+  }
+}
+
+/* --- Estado Inicial --- */
+function defaultConfig(){
+  const h = {};
+  for(let i=0;i<7;i++) h[i] = {open: i!==0, start:'09:00', end:'19:00'};
+  return {
+    shop:'Minha Barbearia', step:30, logo:null, theme:'dark',
+    barbers:[{id:'b1', name:'Barbeiro'}],
+    services:[
+      {id:'s1', name:'Corte', min:30, price:35},
+      {id:'s2', name:'Barba', min:30, price:25},
+      {id:'s3', name:'Corte + barba', min:60, price:55},
+      {id:'s4', name:'Sobrancelha', min:15, price:15},
+      {id:'s5', name:'Pezinho', min:15, price:10}
+    ],
+    hours:h
+  };
+}
+
+function normCfg(v){
+  const d = defaultConfig();
+  if(!v || typeof v !== 'object') return d;
+  const o = JSON.parse(JSON.stringify(v));
+  return {
+    shop: o.shop || d.shop,
+    logo: (typeof o.logo === 'string' && o.logo) ? o.logo : null,
+    theme: ['light','dark'].includes(o.theme) ? o.theme : 'dark',
+    step: [15,20,30,45,60].includes(o.step) ? o.step : d.step,
+    barbers: Array.isArray(o.barbers) && o.barbers.length ? o.barbers : d.barbers,
+    services: Array.isArray(o.services) ? o.services : d.services,
+    hours: Object.assign(d.hours, o.hours || {})
+  };
+}
+
+const S = { cfg:defaultConfig(), days:{}, date:today(), barber:null, tab:'agenda', month:today().slice(0,7), ready:false, mode:'local' };
+
+/* --- Armazenamento Local --- */
+function saveLocal(){
+  try{ localStorage.setItem('barbearia:v1', JSON.stringify({cfg:S.cfg, days:S.days})); }catch(e){}
+}
+function loadLocal(){
+  try{
+    const r = localStorage.getItem('barbearia:v1');
+    if(r){ const o = JSON.parse(r); S.cfg = normCfg(o.cfg); S.days = o.days && typeof o.days === 'object' ? o.days : {}; }
+  }catch(e){}
+}
+function persistDay(date){
+  if(!(S.days[date] && S.days[date].length)) delete S.days[date];
+  saveLocal();
+}
+function persistConfig(){
+  saveLocal();
+}
+
+/* --- Controle de Tema --- */
+function applyTheme(theme){
+  S.cfg.theme = theme;
+  document.documentElement.setAttribute('data-theme', theme);
+  const icon = $('#theme-icon'), label = $('#theme-label');
+  if(icon && label){
+    icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+    label.textContent = theme === 'dark' ? 'Claro' : 'Escuro';
+  }
+}
+function toggleTheme(){
+  const next = S.cfg.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  persistConfig();
+}
+
+/* --- Carregamento da Logomarca --- */
+function loadLogoFile(file){
+  if(!file.type || file.type.indexOf('image/') !== 0){ toast('Escolha um arquivo de imagem.'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const max = 240;
+      let w = img.width, h = img.height;
+      if(w > max || h > max){ if(w >= h){ h = Math.round(h*max/w); w = max; } else { w = Math.round(w*max/h); h = max; } }
+      const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,w,h);
+      S.cfg.logo = canvas.toDataURL('image/png');
+      persistConfig(); render(); toast('Logo atualizada');
+    };
+    img.onerror = () => toast('Não foi possível ler essa imagem.');
+    img.src = e.target.result;
+  };
+  reader.onerror = () => toast('Não foi possível ler esse arquivo.');
+  reader.readAsDataURL(file);
+}
+
+/* --- Regras de Negócio --- */
+const dayList = date => S.days[date] || [];
+const hoursFor = date => S.cfg.hours[pdate(date).getDay()] || {open:false,start:'09:00',end:'19:00'};
+const barberName = id => (S.cfg.barbers.find(b => b.id === id) || {name:'—'}).name;
+function ensureBarber(){
+  if(!S.cfg.barbers.find(b => b.id === S.barber)) S.barber = S.cfg.barbers[0].id;
+}
+function allAppts(){ return Object.keys(S.days).flatMap(d => S.days[d]); }
+function findAppt(id){ return allAppts().find(a => a.id === id); }
+function conflict(date, barberId, start, dur, exceptId){
+  return dayList(date).find(a => a.barberId === barberId && active(a) && a.id !== exceptId &&
+    start < tmin(a.time)+a.dur && start+dur > tmin(a.time));
+}
+function freeStarts(date, barberId, dur, exceptId){
+  const h = hoursFor(date); if(!h.open) return [];
+  const o = tmin(h.start), c = tmin(h.end), step = S.cfg.step, now = date === today() ? nowMin() : -1, out = [];
+  for(let t=o; t+dur<=c; t+=step){ if(t < now) continue; if(!conflict(date, barberId, t, dur, exceptId)) out.push(t); }
+  return out;
+}
+function upsert(date, appt){
+  const l = S.days[date] || (S.days[date] = []);
+  const i = l.findIndex(a => a.id === appt.id);
+  if(i >= 0) l[i] = appt; else l.push(appt);
+}
+function removeAppt(date, id){
+  if(S.days[date]) S.days[date] = S.days[date].filter(a => a.id !== id);
+}
+function waLink(a){
+  const d = digits(a.phone); if(d.length < 8) return null;
+  const num = d.length <= 11 ? '55'+d : d;
+  const first = (a.client||'').trim().split(/\s+/)[0] || '';
+  const msg = 'Olá, '+first+'! Aqui é da '+S.cfg.shop+'. Seu horário está marcado para '+fmtLong(a.date)+' às '+a.time+(a.serviceName?' ('+a.serviceName+')':'')+'. Podemos confirmar?';
+  return 'https://wa.me/'+num+'?text='+encodeURIComponent(msg);
+}
+const WA_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>';
+
+/* --- Enviar Horários pelo WhatsApp --- */
+function computeSlotsForModal(){
+  const svc = S.cfg.services.find(s => s.id === SM.serviceId) || S.cfg.services[0];
+  const dur = svc ? svc.min : 30;
+  return freeStarts(SM.date, SM.barberId, dur).map(mtime);
+}
+function preselectSlots(){
+  SM.selected = new Set(computeSlotsForModal());
+}
+function slotsMessage(){
+  const times = Array.from(SM.selected).sort((a,b) => tmin(a)-tmin(b));
+  const svc = S.cfg.services.find(s => s.id === SM.serviceId);
+  const first = (SM.client||'').trim().split(/\s+/)[0] || '';
+  let msg = 'Olá'+(first?', '+first:'')+'! Aqui é da '+S.cfg.shop+'.';
+  msg += ' Horários disponíveis'+(S.cfg.barbers.length>1?' com '+barberName(SM.barberId):'')+' em '+fmtLong(SM.date)+(svc?' para '+svc.name:'')+':';
+  msg += '\n'+(times.length ? times.map(t => '• '+t).join('\n') : '(selecione ao menos um horário)');
+  msg += '\nQual horário fica melhor pra você?';
+  return msg;
+}
+function openSlotsModal(){
+  ensureBarber();
+  const svc = S.cfg.services[0];
+  SM = {date:S.date, barberId:S.barber, serviceId: svc ? svc.id : '', client:'', phone:''};
+  preselectSlots();
+  renderSlotsModal();
+}
+function renderSlotsModal(){
+  const barberField = S.cfg.barbers.length > 1 ?
+    '<div><label class="f" for="sm-barber">Barbeiro</label><select id="sm-barber">'+S.cfg.barbers.map(b => '<option value="'+esc(b.id)+'"'+(b.id===SM.barberId?' selected':'')+'>'+esc(b.name)+'</option>').join('')+'</select></div>' : '';
+  const svcOpts = S.cfg.services.map(s => '<option value="'+esc(s.id)+'"'+(s.id===SM.serviceId?' selected':'')+'>'+esc(s.name)+' · '+s.min+' min</option>').join('');
+  const slots = computeSlotsForModal();
+  const list = slots.length ? slots.map(t => '<button type="button" data-a="smslot" data-time="'+t+'" class="'+(SM.selected.has(t)?'on':'')+'">'+t+'</button>').join('') :
+    '<span style="color:var(--muted);font-size:14px;font-weight:600">Sem horários livres nesse dia para esse serviço.</span>';
+
+  const html = '<h2>Enviar horários disponíveis</h2>'+
+    '<p class="lead">Escolha os horários e mande direto no WhatsApp do cliente para ele confirmar.</p>'+
+    '<div class="fld"><label class="f" for="sm-client">Nome do cliente</label><input type="text" id="sm-client" value="'+esc(SM.client)+'" placeholder="Digite o nome..." maxlength="80" autocomplete="off"><div id="sm-suggest" class="suggest-box" hidden></div></div>'+
+    '<div class="fld"><label class="f" for="sm-phone">WhatsApp / telefone</label><input type="tel" id="sm-phone" value="'+esc(SM.phone)+'" placeholder="(98) 99999-9999" inputmode="tel" maxlength="30"></div>'+
+    '<div class="g2 fld"><div><label class="f" for="sm-date">Data</label><input type="date" id="sm-date" value="'+SM.date+'"></div>'+barberField+'</div>'+
+    '<div class="fld"><label class="f" for="sm-service">Serviço</label><select id="sm-service">'+svcOpts+'</select></div>'+
+    '<label class="f">Horários para enviar (toque para marcar/desmarcar)</label><div class="times" style="max-height:160px">'+list+'</div>'+
+    '<label class="f">Prévia da mensagem</label><pre id="sm-preview" style="white-space:pre-wrap;font:inherit;background:var(--bg);border-radius:10px;padding:10px 12px;margin:0 0 12px;font-size:13px;font-weight:600;border:1px solid var(--border)">'+esc(slotsMessage())+'</pre>'+
+    '<div class="mact"><button class="btn pri grow" data-a="smsend" type="button">Abrir WhatsApp</button><button class="btn" data-a="smcopy" type="button">Copiar mensagem</button><button class="btn ghost" data-a="close" type="button">Fechar</button></div>';
+  openModal(html);
+}
+function updateSlotsPreview(){
+  const el = $('#sm-preview'); if(el) el.textContent = slotsMessage();
+}
+
+/* --- Interface e Modais --- */
+let toastT;
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.hidden = false;
+  clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2600);
+}
+function openModal(html){
+  const m = $('#modal'); m.innerHTML = '<div class="sheet" role="dialog" aria-modal="true">'+html+'</div>';
+  m.hidden = false; document.body.classList.add('lock');
+}
+function closeModal(){
+  const m = $('#modal'); m.hidden = true; m.innerHTML = ''; document.body.classList.remove('lock'); M = null; SM = null; CM = null;
+}
+
+/* --- Renderização da Agenda --- */
+function weekDays(date){
+  const d = pdate(date), dow = (d.getDay()+6) % 7;
+  const start = addDays(date, -dow);
+  return Array.from({length:7}, (_, i) => addDays(start, i));
+}
+
+function cardHtml(a){
+  const s = tmin(a.time), e = s + a.dur, id = esc(a.id);
+  if(a.block){
+    return '<article class="card block" data-a="open" data-id="'+id+'" role="button" tabindex="0">'+
+      '<div class="t"><b>'+a.time+'</b><span>'+mtime(e)+'</span></div>'+
+      '<div><div class="nm">Horário bloqueado</div><div class="sb">'+esc(a.client || 'Sem motivo informado')+'</div></div></article>';
+  }
+  const nowM = S.date === today() ? nowMin() : null;
+  const live = nowM !== null && a.status !== 'concluido' && active(a) && nowM >= s && nowM < e;
+  const wa = waLink(a);
+  const quick = a.status === 'agendado' ? '<button class="btn pri sm" data-a="advance" data-id="'+id+'" type="button">Confirmar</button>'
+    : a.status === 'confirmado' ? '<button class="btn pri sm" data-a="advance" data-id="'+id+'" type="button">Concluir</button>' : '';
+  return '<article class="card st-'+a.status+(live?' live':'')+'" data-a="open" data-id="'+id+'" role="button" tabindex="0">'+
+    '<div class="t"><b>'+a.time+'</b><span>'+mtime(e)+'</span></div>'+
+    '<div><div class="nm">'+esc(a.client)+'</div>'+
+    '<div class="sb">'+esc(a.serviceName || 'Sem serviço')+' · '+a.dur+' min · '+money(a.price)+'</div>'+
+    (a.notes ? '<div class="nt">'+esc(a.notes)+'</div>' : '')+
+    '<div class="meta"><span class="tag '+a.status+'">'+STATUS[a.status]+'</span>'+
+    (live ? '<span class="tag live">Em atendimento</span>' : '')+
+    (wa ? '<a class="wa" data-a="noop" href="'+wa+'" target="_blank" rel="noopener">'+WA_ICON+'WhatsApp</a>' : '')+
+    '</div></div>'+
+    (quick ? '<div class="quick">'+quick+'</div>' : '')+'</article>';
+}
+
+function timelineHtml(){
+  const date = S.date, bid = S.barber, h = hoursFor(date), step = S.cfg.step;
+  const list = dayList(date).filter(a => a.barberId === bid);
+  const act = list.filter(active).sort((a,b) => tmin(a.time)-tmin(b.time) || a.dur-b.dur);
+  const off = list.filter(a => !active(a)).sort((a,b) => tmin(a.time)-tmin(b.time));
+  const o = h.open ? tmin(h.start) : (act[0] ? tmin(act[0].time) : 540);
+  const c = h.open ? tmin(h.end) : o;
+  const nowM = date === today() ? nowMin() : null;
+  const rows = []; let nowPlaced = false, cur = o, k = 0;
+  const nowLine = () => '<div class="nowline"><span>'+mtime(nowM)+'</span><i></i></div>';
+  const place = t => { if(nowM !== null && !nowPlaced && t > nowM){ rows.push(nowLine()); nowPlaced = true; } };
+  while(cur < c || k < act.length){
+    const nx = act[k];
+    if(nx && (tmin(nx.time) < cur+step || cur >= c)){
+      place(tmin(nx.time)); rows.push(cardHtml(nx)); k++;
+      const end = tmin(nx.time)+nx.dur;
+      if(end > cur) cur = o + Math.ceil((end-o)/step)*step;
+      continue;
+    }
+    place(cur);
+    const past = (date < today()) || (nowM !== null && cur+step <= nowM);
+    rows.push('<button class="free'+(past?' past':'')+'" data-a="new" data-time="'+mtime(cur)+'" type="button">'+
+      '<div class="t"><b>'+mtime(cur)+'</b></div><div class="slot"><span>Livre</span><b>+ Agendar</b></div></button>');
+    cur += step;
+  }
+  if(nowM !== null && !nowPlaced){ rows.push(nowLine()); }
+  let html = '';
+  if(!h.open){
+    html += '<div class="closed-box"><b>Barbearia fechada neste dia</b>Você ainda pode lançar um agendamento se abrir uma exceção.</div>';
+  } else if(!act.length){
+    html += '<div class="empty"><b>Nenhum agendamento neste dia</b>Toque em um horário livre para marcar o primeiro cliente.</div>';
+  }
+  html += '<div class="tl">'+rows.join('')+'</div>';
+  if(off.length){
+    html += '<h3 class="sec">Cancelados e faltas</h3><div class="tl dim">'+off.map(cardHtml).join('')+'</div>';
+  }
+  return html;
+}
+
+function agendaHtml(){
+  ensureBarber();
+  const date = S.date, isToday = date === today();
+  const d = pdate(date);
+  const list = dayList(date).filter(a => a.barberId === S.barber && !a.block);
+  const act = list.filter(active);
+  const done = act.filter(a => a.status === 'concluido');
+  const expected = act.reduce((s,a) => s+(+a.price||0), 0);
+  const received = done.reduce((s,a) => s+(+a.price||0), 0);
+  let next = '';
+  if(isToday){
+    const n = nowMin();
+    const nx = act.filter(a => a.status !== 'concluido' && tmin(a.time)+a.dur > n).sort((a,b) => tmin(a.time)-tmin(b.time))[0];
+    if(nx) next = '<div class="next"><b>'+(tmin(nx.time) <= n ? 'Em atendimento: ' : 'Próximo: ')+nx.time+'</b> · '+esc(nx.client)+' · '+esc(nx.serviceName||'')+'</div>';
+  }
+  const week = weekDays(date).map(w => {
+    const cnt = dayList(w).filter(a => a.barberId === S.barber && active(a) && !a.block).length;
+    const wd = pdate(w);
+    return '<button class="wd'+(w===date?' sel':'')+(w===today()?' today':'')+(hoursFor(w).open?'':' closed')+'" data-a="day" data-date="'+w+'" type="button">'+
+      '<small>'+WDS[wd.getDay()]+'</small><b>'+wd.getDate()+'</b><em>'+(cnt?cnt+(cnt===1?' cliente':' clientes'):'')+'</em></button>';
+  }).join('');
+  const barbers = S.cfg.barbers.length > 1 ?
+    '<div class="chips" role="group">'+S.cfg.barbers.map(b => '<button class="pill'+(b.id===S.barber?' on':'')+'" data-a="barber" data-id="'+esc(b.id)+'" type="button">'+esc(b.name)+'</button>').join('')+'</div>' : '';
+  return '<section class="datebar">'+
+    '<button class="arrow" data-a="prev" type="button">‹</button>'+
+    '<div class="dtitle"><h2>'+esc(d.toLocaleDateString('pt-BR',{weekday:'long'}))+'</h2><p>'+esc(d.toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'}))+'</p></div>'+
+    '<button class="arrow" data-a="next" type="button">›</button></section>'+
+    '<div class="dtools"><button class="pill'+(isToday?' on':'')+'" data-a="today" type="button">Hoje</button>'+
+    '<label class="jump">Data <input type="date" id="jump" value="'+date+'"></label>'+
+    '<button class="pill" data-a="sendslots" type="button">Enviar horários</button>'+
+    '<button class="pill" data-a="sendConfirmations" type="button">Confirmar D+1</button></div>'+
+    '<div class="week">'+week+'</div>'+barbers+
+    '<div class="stats"><div><b>'+act.length+'</b><span>clientes no dia</span></div>'+
+    '<div><b>'+done.length+'</b><span>concluídos</span></div>'+
+    '<div><b>'+money(expected)+'</b><span>previsto · '+money(received)+' recebido</span></div></div>'+
+    next+timelineHtml();
+}
+
+/* --- Formulário de Agendamento --- */
+let M = null;
+let SM = null;
+
+function defaultTime(date, barberId){
+  const svc = S.cfg.services[0];
+  const f = freeStarts(date, barberId, svc ? svc.min : 30);
+  if(f.length) return mtime(f[0]);
+  const h = hoursFor(date); return h.open ? h.start : '09:00';
+}
+
+function openForm(o){
+  o = o || {};
+  const ex = o.id ? findAppt(o.id) : null;
+  const svc = S.cfg.services[0];
+  const a = ex ? Object.assign({}, ex) : {
+    id:null, date:o.date || S.date, barberId:o.barberId || S.barber, block:!!o.block,
+    time:o.time || defaultTime(o.date || S.date, o.barberId || S.barber),
+    client:o.client || '', phone:o.phone || '', serviceId:svc ? svc.id : '', serviceName:svc ? svc.name : '',
+    dur:o.block ? 60 : (svc ? svc.min : 30), price:o.block ? 0 : (svc ? svc.price : 0), notes:'', status:'agendado'
+  };
+  M = {id:a.id, block:a.block, status:a.status};
+  const svcOpts = (ex && ex.serviceId && !S.cfg.services.find(s => s.id === ex.serviceId) ?
+      '<option value="'+esc(ex.serviceId)+'" selected>'+esc(ex.serviceName)+' (removido)</option>' : '') +
+    S.cfg.services.map(s => '<option value="'+esc(s.id)+'"'+(s.id===a.serviceId?' selected':'')+'>'+esc(s.name)+' · '+s.min+' min · '+money(s.price)+'</option>').join('');
+  const barberField = S.cfg.barbers.length > 1 ?
+    '<div class="fld"><label class="f" for="f-barber">Barbeiro</label><select id="f-barber">'+S.cfg.barbers.map(b => '<option value="'+esc(b.id)+'"'+(b.id===a.barberId?' selected':'')+'>'+esc(b.name)+'</option>').join('')+'</select></div>' :
+    '<input type="hidden" id="f-barber" value="'+esc(a.barberId)+'">';
+  const wa = ex ? waLink(ex) : null;
+
+  let html = '<h2>'+(ex ? (a.block ? 'Editar bloqueio' : 'Editar agendamento') : (a.block ? 'Bloquear horário' : 'Novo agendamento'))+'</h2>';
+  if(!ex){
+    html += '<div class="seg fld" role="group"><button type="button" data-a="mtype" data-block="0" class="'+(a.block?'':'on')+'">Cliente</button><button type="button" data-a="mtype" data-block="1" class="'+(a.block?'on':'')+'">Bloqueio (almoço, folga…)</button></div>';
+  }
+  
+  if(a.block){
+    html += '<div class="fld"><label class="f" for="f-client">Motivo</label><input type="text" id="f-client" value="'+esc(a.client)+'" placeholder="Ex.: almoço, banco, folga" maxlength="80"></div>';
+  } else {
+    html += '<div class="fld"><label class="f" for="f-client">Nome do cliente</label><input type="text" id="f-client" value="'+esc(a.client)+'" placeholder="Digite para buscar ou cadastrar..." autocomplete="off" maxlength="80"><div id="f-suggest" class="suggest-box" hidden></div></div>'+
+      '<div class="fld"><label class="f" for="f-phone">WhatsApp / telefone</label><input type="tel" id="f-phone" value="'+esc(a.phone)+'" placeholder="(98) 99999-9999" inputmode="tel" maxlength="30"></div>'+
+      '<div class="fld"><label class="f" for="f-service">Serviço</label><select id="f-service">'+svcOpts+'</select></div>';
+  }
+
+  html += barberField+
+    '<div class="g3 fld"><div><label class="f" for="f-date">Data</label><input type="date" id="f-date" value="'+a.date+'"></div>'+
+    '<div><label class="f" for="f-time">Hora</label><input type="time" id="f-time" value="'+a.time+'" step="300"></div>'+
+    '<div><label class="f" for="f-dur">Duração (min)</label><input type="number" id="f-dur" value="'+a.dur+'" min="5" step="5" inputmode="numeric"></div></div>'+
+    '<div id="f-hint" class="hint"></div><div class="times" id="f-times"></div>';
+  if(!a.block){
+    html += '<div class="fld"><label class="f" for="f-price">Valor (R$)</label><input type="number" id="f-price" value="'+a.price+'" min="0" step="0.01" inputmode="decimal"></div>'+
+      '<div class="fld"><label class="f" for="f-notes">Observações</label><textarea id="f-notes" maxlength="300" placeholder="Ex.: degradê na régua 1, prefere máquina">'+esc(a.notes)+'</textarea></div>';
+    if(ex){
+      html += '<div class="fld"><label class="f">Situação</label><div class="seg" id="f-status">'+
+        Object.keys(STATUS).map(k => '<button type="button" data-a="mstatus" data-s="'+k+'" class="'+(k===a.status?'on':'')+'">'+STATUS[k]+'</button>').join('')+'</div></div>';
+    }
+  }
+  html += '<p class="err" id="f-err" hidden></p><div class="mact">'+
+    '<button class="btn pri grow" data-a="save" type="button">Salvar</button>'+
+    '<button class="btn" data-a="close" type="button">Voltar</button>'+
+    (wa ? '<a class="btn" data-a="noop" href="'+wa+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;color:var(--green)">'+WA_ICON+'WhatsApp</a>' : '')+
+    (ex ? '<button class="btn ghost" data-a="del" type="button" style="color:var(--red)">Excluir</button>' : '')+
+    '</div>';
+  openModal(html);
+  refreshHints();
+}
+
+function refreshHints(){
+  if(!M) return;
+  const g = id => { const e = $('#'+id); return e ? e.value : ''; };
+  const date = g('f-date'), time = g('f-time'), dur = parseInt(g('f-dur'),10), bid = g('f-barber');
+  const hint = $('#f-hint'), box = $('#f-times');
+  if(!date || !/^\d\d:\d\d$/.test(time) || !(dur >= 5)){ hint.className = 'hint warn'; hint.textContent = 'Preencha data, hora e duração.'; box.innerHTML = ''; return; }
+  const s = tmin(time), e = s+dur, st = M.status;
+  const inactive = !M.block && (st === 'cancelado' || st === 'faltou');
+  const c = inactive ? null : conflict(date, bid, s, dur, M.id);
+  const h = hoursFor(date);
+  M.conflict = !!c;
+  if(c){
+    hint.className = 'hint bad';
+    hint.textContent = 'Horário ocupado: '+(c.block ? 'bloqueio' : c.client)+' das '+c.time+' às '+mtime(tmin(c.time)+c.dur)+'.';
+  } else if(!h.open){
+    hint.className = 'hint warn'; hint.textContent = 'A barbearia está fechada neste dia. Você pode salvar mesmo assim.';
+  } else if(s < tmin(h.start) || e > tmin(h.end)){
+    hint.className = 'hint warn'; hint.textContent = 'Fora do expediente ('+h.start+' às '+h.end+'). Você pode salvar mesmo assim.';
+  } else if(date < today() || (date === today() && s < nowMin())){
+    hint.className = 'hint warn'; hint.textContent = 'Atenção: essa data ou horário já passou.';
+  } else {
+    hint.className = 'hint'; hint.textContent = 'Livre: '+time+' até '+mtime(e)+'.';
+  }
+  const f = freeStarts(date, bid, dur, M.id);
+  box.innerHTML = f.length ? f.slice(0,48).map(t => '<button type="button" data-a="mtime" data-time="'+mtime(t)+'" class="'+(mtime(t)===time?'on':'')+'">'+mtime(t)+'</button>').join('') :
+    '<span style="color:var(--muted);font-size:14px;font-weight:600">Sem horários livres nesse dia para essa duração.</span>';
+}
+
+function saveForm(){
+  if(!M) return;
+  const g = id => { const e = $('#'+id); return e ? e.value : ''; };
+  const err = $('#f-err');
+  const fail = m => { err.textContent = m; err.hidden = false; };
+  const date = g('f-date'), time = g('f-time'), dur = parseInt(g('f-dur'),10), bid = g('f-barber');
+  const client = g('f-client').trim();
+
+  if(!M.block && !client) return fail('Informe o nome do cliente.');
+  if(!date) return fail('Escolha a data.');
+  if(!/^\d\d:\d\d$/.test(time)) return fail('Escolha a hora.');
+  if(!(dur >= 5)) return fail('A duração precisa ser de pelo menos 5 minutos.');
+  const status = M.block ? 'agendado' : M.status;
+  const checks = M.block || (status !== 'cancelado' && status !== 'faltou');
+  const c = checks ? conflict(date, bid, tmin(time), dur, M.id) : null;
+  if(c) return fail('Esse horário está ocupado por '+(c.block ? 'um bloqueio' : c.client)+' ('+c.time+' às '+mtime(tmin(c.time)+c.dur)+'). Escolha outro.');
+  const old = M.id ? findAppt(M.id) : null;
+  const svc = S.cfg.services.find(s => s.id === g('f-service'));
+  const appt = {
+    id: M.id || uid(), date:date, time:time, dur:dur, barberId:bid, block:M.block, client:client,
+    phone: M.block ? '' : g('f-phone').trim(),
+    serviceId: M.block ? '' : g('f-service'),
+    serviceName: M.block ? '' : (svc ? svc.name : (old ? old.serviceName : '')),
+    price: M.block ? 0 : Math.max(0, parseFloat(g('f-price')) || 0),
+    notes: M.block ? '' : g('f-notes').trim(),
+    status:status, createdAt: old ? old.createdAt : Date.now()
+  };
+  if(old && old.date !== date){ removeAppt(old.date, old.id); persistDay(old.date); }
+  upsert(date, appt); persistDay(date);
+  S.date = date; S.barber = bid; S.tab = 'agenda';
+  closeModal(); render(); toast(M === null && old ? 'Alterações salvas' : 'Agendamento salvo');
+}
+
+/* --- Módulos Complementares e Gestão de Clientes --- */
+let CM = null;
+
+function clientsData(){
+  const m = new Map(), t = today();
+  allAppts().filter(a => !a.block && a.client).forEach(a => {
+    const d = digits(a.phone), key = d.length >= 8 ? d : a.client.trim().toLowerCase();
+    let c = m.get(key);
+    if(!c){ c = {key:key, name:a.client, phone:a.phone, done:0, miss:0, cancel:0, spent:0, last:'', next:'', lastSeen:''}; m.set(key, c); }
+    if(a.date >= c.lastSeen){ c.lastSeen = a.date; c.name = a.client; if(a.phone) c.phone = a.phone; }
+    if(a.status === 'concluido'){ c.done++; c.spent += +a.price || 0; if(a.date > c.last) c.last = a.date; }
+    else if(a.status === 'faltou') c.miss++;
+    else if(a.status === 'cancelado') c.cancel++;
+    else if(a.date >= t && (!c.next || a.date < c.next)) c.next = a.date;
+  });
+  return Array.from(m.values()).sort((a,b) => a.name.localeCompare(b.name));
+}
+
+function clientListHtml(){
+  const q = ($('#cq') ? $('#cq').value : '').trim().toLowerCase(), qd = digits(q);
+  const list = clientsData().filter(c => !q || c.name.toLowerCase().includes(q) || (qd && digits(c.phone).includes(qd)));
+  if(!list.length) return '<div class="empty"><b>'+(q ? 'Nenhum cliente encontrado' : 'Nenhum cliente ainda')+'</b>'+(q ? 'Confira o nome ou o telefone.' : 'Os clientes aparecem aqui conforme você lança os agendamentos.')+'</div>';
+  return '<div class="panel">'+list.slice(0,200).map(c => {
+    const bits = [c.done+(c.done===1?' atendimento':' atendimentos')];
+    if(c.last) bits.push('último em '+fmtShort(c.last));
+    if(c.miss) bits.push(c.miss+(c.miss===1?' falta':' faltas'));
+    if(c.spent) bits.push(money(c.spent)+' gastos');
+    return '<div class="client"><div style="min-width:0"><div class="nm">'+esc(c.name)+'</div><div class="sb">'+esc(bits.join(' · '))+'</div>'+
+      (c.phone ? '<div class="sb">'+esc(c.phone)+'</div>' : '')+
+      (c.next ? '<div class="meta"><span class="tag confirmado">Próximo: '+fmtShort(c.next)+'</span></div>' : '')+'</div>'+
+      '<div class="act">'+
+      (c.phone && digits(c.phone).length >= 8 ? '<a class="wa" data-a="noop" href="https://wa.me/'+(digits(c.phone).length<=11?'55':'')+digits(c.phone)+'" target="_blank" rel="noopener">'+WA_ICON+'</a>' : '')+
+      '<button class="btn sm" data-a="chistory" data-key="'+esc(c.key)+'" type="button">Histórico</button>'+
+      '<button class="btn sm" data-a="cnew" data-name="'+esc(c.name)+'" data-phone="'+esc(c.phone||'')+'" type="button">Agendar</button>'+
+      '<button class="btn sm" data-a="cedit" data-key="'+esc(c.key)+'" data-name="'+esc(c.name)+'" data-phone="'+esc(c.phone||'')+'" type="button">Editar</button>'+
+      '</div></div>';
+  }).join('')+'</div>';
+}
+
+function openClientHistory(key){
+  const client = clientsData().find(c => c.key === key);
+  if(!client) return;
+  const history = allAppts().filter(a => !a.block && (digits(a.phone) === key || a.client.trim().toLowerCase() === key)).sort((a,b) => b.date.localeCompare(a.date) || b.time.localeCompare(a.time));
+  
+  let listHtml = history.map(h => `
+    <div class="history-item">
+      <div class="h-date">${fmtShort(h.date)} às ${h.time} — <span class="tag ${h.status}">${STATUS[h.status]}</span></div>
+      <div class="h-detail"><b>Serviço:</b> ${esc(h.serviceName || '—')} (${money(h.price)}) | <b>Barbeiro:</b> ${esc(barberName(h.barberId))}</div>
+      ${h.notes ? `<div class="h-detail" style="margin-top:2px;font-style:italic">" ${esc(h.notes)} "</div>` : ''}
+    </div>
+  `).join('');
+
+  const html = '<h2>Ficha do Cliente: '+esc(client.name)+'</h2>'+
+    '<div class="stats" style="margin-bottom:14px"><div><b>'+client.done+'</b><span>Concluídos</span></div><div><b>'+money(client.spent)+'</b><span>Total Gasto</span></div><div><b>'+client.miss+'</b><span>Faltas</span></div></div>'+
+    '<h3 class="sec" style="margin-top:0;font-size:15px">Histórico de Atendimentos</h3>'+
+    '<div style="max-height:280px;overflow-y:auto;margin-bottom:14px">'+(listHtml || '<p class="sb">Nenhum registro encontrado.</p>')+'</div>'+
+    '<div class="mact"><button class="btn pri grow" data-a="close" type="button">Fechar</button></div>';
+  openModal(html);
+}
+
+function openClientModal(c){
+  CM = c;
+  const html = '<h2>Editar Cliente</h2>'+
+    '<div class="fld"><label class="f" for="cm-name">Nome do Cliente</label><input type="text" id="cm-name" value="'+esc(c.name)+'" maxlength="80"></div>'+
+    '<div class="fld"><label class="f" for="cm-phone">WhatsApp / Telefone</label><input type="tel" id="cm-phone" value="'+esc(c.phone)+'" placeholder="(98) 99999-9999" maxlength="30"></div>'+
+    '<p class="err" id="cm-err" hidden></p>'+
+    '<div class="mact">'+
+    '<button class="btn pri grow" data-a="csave" type="button">Salvar Alterações</button>'+
+    '<button class="btn" data-a="close" type="button">Voltar</button>'+
+    '<button class="btn ghost" data-a="cdel" type="button" style="color:var(--red)">Excluir Cliente</button>'+
+    '</div>';
+  openModal(html);
+}
+
+function saveClient(){
+  if(!CM) return;
+  const newName = $('#cm-name').value.trim(), newPhone = $('#cm-phone').value.trim();
+  const err = $('#cm-err');
+  if(!newName){ err.textContent = 'Informe o nome do cliente.'; err.hidden = false; return; }
+  
+  Object.keys(S.days).forEach(d => {
+    let touched = false;
+    S.days[d].forEach(a => {
+      const matchPhone = digits(a.phone) && digits(a.phone) === digits(CM.phone);
+      const matchName = a.client.trim().toLowerCase() === CM.name.trim().toLowerCase();
+      if(!a.block && (matchPhone || matchName)){
+        a.client = newName;
+        a.phone = newPhone;
+        touched = true;
+      }
+    });
+    if(touched) persistDay(d);
+  });
+
+  closeModal(); renderView(); toast('Cliente atualizado');
+}
+
+function deleteClient(){
+  if(!CM) return;
+  const oldKey = CM.key;
+  Object.keys(S.days).forEach(d => {
+    const orig = S.days[d].length;
+    S.days[d] = S.days[d].filter(a => {
+      if(a.block) return true;
+      const key = digits(a.phone).length >= 8 ? digits(a.phone) : a.client.trim().toLowerCase();
+      return key !== oldKey;
+    });
+    if(S.days[d].length !== orig) persistDay(d);
+  });
+
+  closeModal(); renderView(); toast('Cliente e registros removidos');
+}
+
+function sendConfirmationsD1(){
+  const tomorrow = addDays(today(), 1);
+  const list = dayList(tomorrow).filter(a => !a.block && a.status === 'agendado' && digits(a.phone).length >= 8);
+  if(!list.length){ toast('Nenhum agendamento pendente com WhatsApp para amanhã.'); return; }
+  
+  const a = list[0];
+  const num = digits(a.phone).length <= 11 ? '55'+digits(a.phone) : digits(a.phone);
+  const msg = `Olá, ${a.client}! Passando para confirmar seu horário amanhã (${fmtShort(tomorrow)}) às ${a.time} na ${S.cfg.shop}. Podemos confirmar?`;
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg), '_blank');
+}
+
+function exportCSV(){
+  const ym = S.month;
+  const list = Object.keys(S.days).filter(d => d.startsWith(ym)).flatMap(d => S.days[d]).filter(a => !a.block);
+  if(!list.length){ toast('Nenhum dado para exportar neste mês.'); return; }
+  
+  let csv = 'Data;Hora;Cliente;Telefone;Servico;Valor;Barbeiro;Status\n';
+  list.forEach(a => {
+    csv += `${a.date};${a.time};"${a.client}";"${a.phone}";"${a.serviceName||''}";${a.price};"${barberName(a.barberId)}";"${STATUS[a.status]}"\n`;
+  });
+
+  const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `relatorio-${ym}.csv`;
+  a.click();
+  toast('Relatório exportado');
+}
+
+function exportBackup(){
+  const data = JSON.stringify({cfg:S.cfg, days:S.days});
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `backup-barbearia-${today()}.json`;
+  a.click();
+  toast('Backup exportado com sucesso');
+}
+
+function importBackup(file){
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if(parsed.cfg && parsed.days){
+        S.cfg = normCfg(parsed.cfg);
+        S.days = parsed.days;
+        saveLocal();
+        render();
+        toast('Backup restaurado com sucesso!');
+      } else { toast('Arquivo de backup inválido.'); }
+    } catch(err){ toast('Erro ao ler arquivo de backup.'); }
+  };
+  reader.readAsText(file);
+}
+
+function clientesHtml(){
+  return '<h2 class="sec" style="margin-top:0">Clientes</h2><div class="fld"><label class="f" for="cq">Buscar por nome ou telefone</label><input type="search" id="cq" placeholder="Digite para filtrar..." autocomplete="off"></div><div id="clist">'+clientListHtml()+'</div>';
+}
+
+function resumoHtml(){
+  const ym = S.month, [y,m] = ym.split('-').map(Number);
+  const label = cap(new Date(y, m-1, 1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'}));
+  const all = Object.keys(S.days).filter(d => d.startsWith(ym)).flatMap(d => S.days[d]).filter(a => !a.block);
+  const done = all.filter(a => a.status === 'concluido');
+  const pend = all.filter(a => a.status === 'agendado' || a.status === 'confirmado');
+  const miss = all.filter(a => a.status === 'faltou').length, canc = all.filter(a => a.status === 'cancelado').length;
+  const rev = done.reduce((s,a) => s+(+a.price||0), 0), exp = pend.reduce((s,a) => s+(+a.price||0), 0);
+  const group = (arr, keyFn) => { const g = {}; arr.forEach(a => { const k = keyFn(a) || 'Sem serviço'; (g[k] = g[k] || {n:0, v:0}); g[k].n++; g[k].v += +a.price||0; }); return Object.entries(g).sort((a,b) => b[1].v-a[1].v || b[1].n-a[1].n); };
+  const bars = rows => { const max = Math.max(1, ...rows.map(r => r[1].n)); return rows.length ? rows.map(r => '<div class="brk"><div><span>'+esc(r[0])+'</span><span>'+r[1].n+' · '+money(r[1].v)+'</span></div><div class="bar"><i style="width:'+Math.round(r[1].n/max*100)+'%"></i></div></div>').join('') : '<p class="sb">Sem atendimentos concluídos neste mês.</p>'; };
+  return '<div class="datebar"><button class="arrow" data-a="mprev" type="button">‹</button><div class="dtitle"><h2>'+esc(label)+'</h2><p>Resumo do mês</p></div><button class="arrow" data-a="mnext" type="button">›</button></div>'+
+    '<div class="dtools"><button class="pill" data-a="exportCSV" type="button">📊 Exportar Relatório Excel/CSV</button></div>'+
+    '<div class="panel" style="margin-top:14px"><div class="big">'+
+    '<div><b>'+money(rev)+'</b><span>recebido (concluídos)</span></div>'+
+    '<div><b>'+money(exp)+'</b><span>a receber (agendados)</span></div>'+
+    '<div><b>'+done.length+'</b><span>atendimentos concluídos</span></div>'+
+    '<div><b>'+(done.length ? money(rev/done.length) : '—')+'</b><span>ticket médio</span></div>'+
+    '<div><b>'+miss+'</b><span>faltas</span></div>'+
+    '<div><b>'+canc+'</b><span>cancelamentos</span></div></div></div>'+
+    '<div class="panel"><h3>Por serviço</h3>'+bars(group(done, a => a.serviceName))+'</div>'+
+    (S.cfg.barbers.length > 1 ? '<div class="panel"><h3>Por barbeiro</h3>'+bars(group(done, a => barberName(a.barberId)))+'</div>' : '');
+}
+
+function ajustesHtml(){
+  const c = S.cfg;
+  return '<h2 class="sec" style="margin-top:0">Ajustes</h2>'+
+    '<div class="panel"><h3>Aparência e Tema</h3>'+
+    '<div class="fld"><button class="btn pri" data-a="toggleTheme" type="button">Alternar Tema (Atual: '+(c.theme==='dark'?'Escuro 🌙':'Claro ☀️')+')</button></div></div>'+
+    '<div class="panel"><h3>Cópia de Segurança (Backup)</h3>'+
+    '<div class="fld"><button class="btn" data-a="exportBackup" type="button">💾 Baixar Arquivo de Backup</button></div>'+
+    '<div class="fld"><label class="f" for="backup-file">Restaurar Backup de Arquivo</label><input type="file" id="backup-file" accept=".json"></div></div>'+
+    '<div class="panel"><h3>Barbearia</h3><div class="fld"><label class="f" for="c-shop">Nome (aparece na mensagem do WhatsApp)</label><input type="text" id="c-shop" data-c="shop" value="'+esc(c.shop)+'" maxlength="60"></div>'+
+    '<div class="fld"><label class="f" for="c-step">Intervalo da agenda</label><select id="c-step" data-c="step">'+[15,20,30,45,60].map(n => '<option value="'+n+'"'+(n===c.step?' selected':'')+'>'+n+' minutos</option>').join('')+'</select></div>'+
+    '<div class="fld"><label class="f" for="logo-file">Logomarca</label><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">'+
+    (c.logo ? '<img src="'+c.logo+'" alt="" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid var(--border)">' : '<div style="width:56px;height:56px;border-radius:12px;background:var(--bg);border:1.5px dashed var(--border)"></div>')+
+    '<input type="file" id="logo-file" accept="image/*" style="max-width:220px">'+
+    (c.logo ? '<button class="btn sm" data-a="delLogo" type="button">Remover</button>' : '')+
+    '</div><p class="sb" style="margin:6px 0 0">A imagem é ajustada automaticamente.</p></div></div>'+
+    '<div class="panel"><h3>Barbeiros</h3>'+c.barbers.map((b,i) => '<div class="brow"><input type="text" data-c="bname" data-i="'+i+'" value="'+esc(b.name)+'" maxlength="40">'+(c.barbers.length>1 ? '<button class="x" data-a="delBarber" data-i="'+i+'" type="button">×</button>' : '<span></span>')+'</div>').join('')+
+    '<div class="brow"><input type="text" id="new-barber" placeholder="Nome do novo barbeiro" maxlength="40"><button class="btn pri" data-a="addBarber" type="button" style="min-height:42px">+</button></div></div>'+
+    '<div class="panel"><h3>Serviços</h3><div class="hd"><span>Nome</span><span>Minutos</span><span>Valor (R$)</span><span></span></div>'+
+    c.services.map((s,i) => '<div class="srow"><input type="text" data-c="sname" data-i="'+i+'" value="'+esc(s.name)+'" maxlength="50"><input type="number" data-c="smin" data-i="'+i+'" value="'+s.min+'" min="5" step="5"><input type="number" data-c="sprice" data-i="'+i+'" value="'+s.price+'" min="0" step="0.01"><button class="x" data-a="delSvc" data-i="'+i+'" type="button">×</button></div>').join('')+
+    '<button class="btn" data-a="addSvc" type="button">+ Adicionar serviço</button></div>'+
+    '<div class="panel" style="margin-bottom:60px"><h3>Horário de funcionamento</h3>'+
+    [1,2,3,4,5,6,0].map(d => { const h = c.hours[d]; return '<div class="hrow"><label class="chk"><input type="checkbox" data-c="hopen" data-d="'+d+'"'+(h.open?' checked':'')+'>'+WD[d]+'</label><input type="time" data-c="hstart" data-d="'+d+'" value="'+h.start+'"'+(h.open?'':' disabled')+'><input type="time" data-c="hend" data-d="'+d+'" value="'+h.end+'"'+(h.open?'':' disabled')+'></div>'; }).join('')+'</div>';
+}
+
+function cfgChange(t){
+  const c = S.cfg, k = t.dataset.c, i = +t.dataset.i, d = t.dataset.d;
+  if(k === 'shop') c.shop = t.value.trim() || 'Minha Barbearia';
+  else if(k === 'step') c.step = +t.value;
+  else if(k === 'bname') c.barbers[i].name = t.value.trim() || 'Barbeiro';
+  else if(k === 'sname') c.services[i].name = t.value.trim() || 'Serviço';
+  else if(k === 'smin') c.services[i].min = Math.max(5, parseInt(t.value,10) || 30);
+  else if(k === 'sprice') c.services[i].price = Math.max(0, parseFloat(t.value) || 0);
+  else if(k === 'hopen'){ c.hours[d].open = t.checked; persistConfig(); renderView(); return; }
+  else if(k === 'hstart') c.hours[d].start = t.value || '09:00';
+  else if(k === 'hend') c.hours[d].end = t.value || '19:00';
+  persistConfig(); $('#shop').textContent = c.shop; toast('Ajuste salvo');
+}
+
+/* --- Renderização Principal --- */
+function renderView(){
+  const v = $('#view');
+  if(!S.ready){ v.innerHTML = '<div class="loading">Abrindo a agenda…</div>'; return; }
+  v.innerHTML = S.tab === 'agenda' ? agendaHtml() : S.tab === 'clientes' ? clientesHtml() : S.tab === 'resumo' ? resumoHtml() : ajustesHtml();
+}
+
+function render(){
+  applyTheme(S.cfg.theme);
+  $('#shop').textContent = S.cfg.shop;
+  document.title = S.cfg.shop+' · Agenda';
+  const bi = $('#brandimg');
+  if(S.cfg.logo){ bi.src = S.cfg.logo; bi.hidden = false; } else { bi.hidden = true; bi.removeAttribute('src'); }
+  const sy = $('#sync');
+  sy.className = 'sync ok';
+  sy.lastChild.textContent = 'Salvo neste navegador';
+  document.querySelectorAll('nav.tabs button').forEach(b => b.setAttribute('aria-current', b.dataset.tab === S.tab ? 'page' : 'false'));
+  $('#fabs').hidden = !(S.ready && S.tab === 'agenda');
+  renderView();
+}
+
+/* --- Lógica Auto-Complete Dinâmico --- */
+function handleClientSuggest(inputEl, suggestEl, phoneEl){
+  const val = inputEl.value.trim().toLowerCase();
+  if(!val){ suggestEl.hidden = true; suggestEl.innerHTML = ''; return; }
+  
+  const cList = clientsData();
+  const matches = cList.filter(c => c.name.toLowerCase().includes(val));
+  
+  if(!matches.length){ suggestEl.hidden = true; suggestEl.innerHTML = ''; return; }
+  
+  suggestEl.innerHTML = matches.map(c => 
+    '<div class="suggest-item" data-name="'+esc(c.name)+'" data-phone="'+esc(c.phone||'')+'">'+
+    '<span>'+esc(c.name)+'</span>'+
+    (c.phone ? '<small>'+esc(c.phone)+'</small>' : '')+
+    '</div>'
+  ).join('');
+  suggestEl.hidden = false;
+}
+
+/* --- Gerenciamento de Eventos --- */
+const H = {
+  noop(){},
+  toggleTheme(){ toggleTheme(); renderView(); },
+  tab(t){ S.tab = t.dataset.tab; render(); window.scrollTo(0,0); },
+  prev(){ S.date = addDays(S.date,-1); renderView(); },
+  next(){ S.date = addDays(S.date,1); renderView(); },
+  today(){ S.date = today(); renderView(); },
+  day(t){ S.date = t.dataset.date; renderView(); },
+  barber(t){ S.barber = t.dataset.id; renderView(); },
+  new(t){ openForm({time:t.dataset.time}); },
+  block(){ openForm({block:true}); },
+  open(t){ openForm({id:t.dataset.id}); },
+  cnew(t){ S.tab = 'agenda'; render(); openForm({client:t.dataset.name, phone:t.dataset.phone}); },
+  cedit(t){ openClientModal({key:t.dataset.key, name:t.dataset.name, phone:t.dataset.phone}); },
+  chistory(t){ openClientHistory(t.dataset.key); },
+  csave(){ saveClient(); },
+  cdel(t){
+    if(t.dataset.sure !== '1'){ t.dataset.sure = '1'; t.textContent = 'Toque de novo para excluir cliente'; return; }
+    deleteClient();
+  },
+  sendConfirmations(){ sendConfirmationsD1(); },
+  exportCSV(){ exportCSV(); },
+  exportBackup(){ exportBackup(); },
+  advance(t){
+    const a = findAppt(t.dataset.id); if(!a) return;
+    a.status = a.status === 'agendado' ? 'confirmado' : 'concluido';
+    persistDay(a.date); renderView(); toast(a.status === 'confirmado' ? 'Cliente confirmado' : 'Atendimento concluído');
+  },
+  mprev(){ const p = S.month.split('-').map(Number); const d = new Date(p[0], p[1]-2, 1); S.month = d.getFullYear()+'-'+pad(d.getMonth()+1); renderView(); },
+  mnext(){ const p = S.month.split('-').map(Number); const d = new Date(p[0], p[1], 1); S.month = d.getFullYear()+'-'+pad(d.getMonth()+1); renderView(); },
+  close(){ closeModal(); },
+  save(){ saveForm(); },
+  mtype(t){
+    const g = id => { const e = $('#'+id); return e ? e.value : ''; };
+    const keep = {date:g('f-date') || S.date, time:g('f-time') || undefined, barberId:g('f-barber') || S.barber, client:g('f-client'), phone:g('f-phone'), block:t.dataset.block === '1'};
+    closeModal(); openForm(keep);
+  },
+  mstatus(t){
+    M.status = t.dataset.s;
+    document.querySelectorAll('#f-status button').forEach(b => b.classList.toggle('on', b === t));
+    refreshHints();
+  },
+  mtime(t){ $('#f-time').value = t.dataset.time; refreshHints(); },
+  del(t){
+    if(t.dataset.sure !== '1'){ t.dataset.sure = '1'; t.textContent = 'Toque de novo para excluir'; return; }
+    const a = findAppt(M.id); if(a){ removeAppt(a.date, a.id); persistDay(a.date); }
+    closeModal(); renderView(); toast('Excluído');
+  },
+  addBarber(){
+    const i = $('#new-barber'), n = i.value.trim(); if(!n) return;
+    S.cfg.barbers.push({id:'b'+uid(), name:n}); persistConfig(); renderView(); toast('Barbeiro adicionado');
+  },
+  delBarber(t){
+    const b = S.cfg.barbers[+t.dataset.i];
+    if(allAppts().some(a => a.barberId === b.id)){ toast('Esse barbeiro tem agendamentos ativos.'); return; }
+    S.cfg.barbers.splice(+t.dataset.i, 1); ensureBarber(); persistConfig(); renderView();
+  },
+  addSvc(){ S.cfg.services.push({id:'s'+uid(), name:'Novo serviço', min:30, price:0}); persistConfig(); renderView(); },
+  delSvc(t){ S.cfg.services.splice(+t.dataset.i, 1); persistConfig(); renderView(); },
+  sendslots(){ openSlotsModal(); },
+  smslot(t){
+    const time = t.dataset.time;
+    if(SM.selected.has(time)) SM.selected.delete(time); else SM.selected.add(time);
+    renderSlotsModal();
+  },
+  smsend(){
+    const d = digits(SM.phone);
+    if(d.length < 8){ toast('Informe um telefone válido.'); return; }
+    if(!SM.selected.size){ toast('Selecione ao menos um horário.'); return; }
+    const num = d.length <= 11 ? '55'+d : d;
+    window.open('https://wa.me/'+num+'?text='+encodeURIComponent(slotsMessage()), '_blank', 'noopener');
+  },
+  smcopy(){
+    const txt = slotsMessage();
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(() => toast('Mensagem copiada')).catch(() => toast('Não foi possível copiar.'));
+    } else toast('Selecione e copie o texto manualmente.');
+  },
+  delLogo(){ S.cfg.logo = null; persistConfig(); render(); }
+};
+
+document.addEventListener('click', e => {
+  const item = e.target.closest('.suggest-item');
+  if(item){
+    const name = item.dataset.name, phone = item.dataset.phone;
+    const parentForm = item.closest('#modal');
+    if(parentForm){
+      if($('#f-client')){
+        $('#f-client').value = name;
+        if($('#f-phone')) $('#f-phone').value = phone;
+        $('#f-suggest').hidden = true;
+      }
+      if($('#sm-client')){
+        $('#sm-client').value = name;
+        if($('#sm-phone')) $('#sm-phone').value = phone;
+        $('#sm-suggest').hidden = true;
+        if(SM){ SM.client = name; SM.phone = phone; updateSlotsPreview(); }
+      }
+    }
+    return;
+  }
+
+  if(!e.target.closest('.fld')){
+    const fs = $('#f-suggest'), sms = $('#sm-suggest');
+    if(fs) fs.hidden = true;
+    if(sms) sms.hidden = true;
+  }
+
+  if(e.target.id === 'modal'){ closeModal(); return; }
+  const t = e.target.closest('[data-a]'); if(!t) return;
+  const f = H[t.dataset.a]; if(f) f(t, e);
+});
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && !$('#modal').hidden) closeModal();
+  if((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role=button][data-a]')){ e.preventDefault(); e.target.click(); }
+});
+
+document.addEventListener('input', e => {
+  const t = e.target;
+  if(t.id === 'cq'){ $('#clist').innerHTML = clientListHtml(); return; }
+  if(t.id === 'f-client' && !M?.block){
+    handleClientSuggest($('#f-client'), $('#f-suggest'), $('#f-phone'));
+    return;
+  }
+  if(t.id === 'sm-client'){
+    handleClientSuggest($('#sm-client'), $('#sm-suggest'), $('#sm-phone'));
+    if(SM){ SM.client = t.value; updateSlotsPreview(); }
+    return;
+  }
+  if(M && ['f-date','f-time','f-dur','f-barber'].includes(t.id)) refreshHints();
+  if(SM && t.id === 'sm-phone'){ SM.phone = t.value; updateSlotsPreview(); }
+});
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if(t.id === 'jump'){ if(t.value){ S.date = t.value; renderView(); } return; }
+  if(t.id === 'f-date'){ refreshHints(); return; }
+  if(t.id === 'logo-file'){ const f = t.files && t.files[0]; if(f) loadLogoFile(f); return; }
+  if(t.id === 'backup-file'){ const f = t.files && t.files[0]; if(f) importBackup(f); return; }
+  if(t.dataset && t.dataset.c){ cfgChange(t); return; }
+  if(SM && t.id === 'sm-date'){ SM.date = t.value || S.date; preselectSlots(); renderSlotsModal(); return; }
+  if(SM && t.id === 'sm-barber'){ SM.barberId = t.value; preselectSlots(); renderSlotsModal(); return; }
+  if(SM && t.id === 'sm-service'){ SM.serviceId = t.value; preselectSlots(); renderSlotsModal(); return; }
+  if(!M) return;
+  if(t.id === 'f-service'){
+    const s = S.cfg.services.find(x => x.id === t.value);
+    if(s){ $('#f-dur').value = s.min; $('#f-price').value = s.price; }
+    refreshHints();
+  }
+  if(['f-date','f-time','f-dur','f-barber'].includes(t.id)) refreshHints();
+});
+
+function init(){
+  setupPWA();
+  loadLocal();
+  ensureBarber();
+  S.ready = true;
+  render();
+}
+
+init();
+})();
+</script>
+</body>
+</html>
